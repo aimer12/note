@@ -1,0 +1,42 @@
+//间接输出1，2
+public class OutputThread implements Runnable {
+
+    private int num;
+    private Object lock;
+    //lock作为锁
+    
+    public OutputThread(int num, Object lock) {
+        super();
+        this.num = num;
+        this.lock = lock;
+    }
+
+    public void run() {
+        try {
+            while(true){
+                synchronized(lock){
+                    lock.notifyAll();
+                    //唤起其他线程
+                    lock.wait();
+                    //block当前线程
+                    System.out.println(num);
+                }
+            }
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+    }
+    
+    public static void main(String[] args){
+        final Object lock = new Object();
+        
+        Thread thread1 = new Thread(new OutputThread(1,lock));
+        Thread thread2 = new Thread(new OutputThread(2, lock));
+        
+        thread1.start();
+        thread2.start();
+    }
+
+}
