@@ -1,0 +1,1 @@
+find . -name "mortgageAll.log*" | xargs grep -n   -E "=[0-9]{8}"   | grep -E "\[com.hsbc.+:[0-9]{3,4}\]" --color=auto -o | sort |uniq -c   
